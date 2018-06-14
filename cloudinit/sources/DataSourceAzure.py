@@ -31,7 +31,8 @@ AGENT_START = ['service', 'walinuxagent', 'start']
 AGENT_START_BUILTIN = "__builtin__"
 BOUNCE_COMMAND_IFUP = [
     'sh', '-xc',
-    "i=$interface; x=0; ifdown $i || x=$?; ifup $i || x=$?; exit $x"
+    "i=$interface; DHCP_HOSTNAME=$hostname; x=0; "
+    "ifdown $i || x=$?; ifup $i || x=$?; exit $x"
 ]
 BOUNCE_COMMAND_FREEBSD = [
     'sh', '-xc',
