@@ -125,11 +125,6 @@ INITSYS_FILES = {
     'sysvinit_deb': [f for f in glob('sysvinit/debian/*') if is_f(f)],
     'sysvinit_openrc': [f for f in glob('sysvinit/gentoo/*') if is_f(f)],
     'sysvinit_suse': [f for f in glob('sysvinit/suse/*') if is_f(f)],
-    'systemd': [render_tmpl(f)
-                for f in (glob('systemd/*.tmpl') +
-                          glob('systemd/*.service') +
-                          glob('systemd/*.target')) if is_f(f)],
-    'systemd.generators': [f for f in glob('systemd/*-generator') if is_f(f)],
     'upstart': [f for f in glob('upstart/*') if is_f(f)],
 }
 INITSYS_ROOTS = {
@@ -138,9 +133,6 @@ INITSYS_ROOTS = {
     'sysvinit_deb': 'etc/init.d',
     'sysvinit_openrc': 'etc/init.d',
     'sysvinit_suse': 'etc/init.d',
-    'systemd': pkg_config_read('systemd', 'systemdsystemunitdir'),
-    'systemd.generators': pkg_config_read('systemd',
-                                          'systemdsystemgeneratordir'),
     'upstart': 'etc/init/',
 }
 INITSYS_TYPES = sorted([f.partition(".")[0] for f in INITSYS_ROOTS.keys()])
@@ -178,47 +170,6 @@ class MyEggInfo(egg_info):
         return ret
 
 
-# TODO: Is there a better way to do this??
-class InitsysInstallData(install):
-    init_system = None
-    user_options = install.user_options + [
-        # This will magically show up in member variable 'init_sys'
-        ('init-system=', None,
-         ('init system(s) to configure (%s) [default: None]' %
-          (", ".join(INITSYS_TYPES)))),
-    ]
-
-    def initialize_options(self):
-        install.initialize_options(self)
-        self.init_system = ""
-
-    def finalize_options(self):
-        install.finalize_options(self)
-
-        if self.init_system and isinstance(self.init_system, str):
-            self.init_system = self.init_system.split(",")
-
-        if len(self.init_system) == 0:
-            self.init_system = ['systemd']
-
-        bad = [f for f in self.init_system if f not in INITSYS_TYPES]
-        if len(bad) != 0:
-            raise DistutilsArgError(
-                "Invalid --init-system: %s" % (','.join(bad)))
-
-        for system in self.init_system:
-            # add data files for anything that starts with '<system>.'
-            datakeys = [k for k in INITSYS_ROOTS
-                        if k.partition(".")[0] == system]
-            for k in datakeys:
-                if not INITSYS_FILES[k]:
-                    continue
-                self.distribution.data_files.append(
-                    (INITSYS_ROOTS[k], INITSYS_FILES[k]))
-        # Force that command to reinitalize (with new file list)
-        self.distribution.reinitialize_command('install_data', True)
-
-
 if not in_virtualenv():
     USR = "/" + USR
     ETC = "/" + ETC
@@ -246,12 +197,6 @@ if os.uname()[0] != 'FreeBSD':
          ['tools/hook-network-manager']),
         ('/usr/lib/udev/rules.d', [f for f in glob('udev/*.rules')])
     ])
-# Use a subclass for install that handles
-# adding on the right init system configuration files
-cmdclass = {
-    'install': InitsysInstallData,
-    'egg_info': MyEggInfo,
-}
 
 requirements = read_requires()
 
@@ -266,7 +211,6 @@ setuptools.setup(
     scripts=['tools/cloud-init-per'],
     license='Dual-licensed under GPLv3 or Apache 2.0',
     data_files=data_files,
-    cmdclass=cmdclass,
     entry_points={
         'console_scripts': [
             'cloud-init = cloudinit.cmd.main:main'
