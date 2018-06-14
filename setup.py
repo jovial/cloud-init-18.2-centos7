@@ -244,8 +244,7 @@ if os.uname()[0] != 'FreeBSD':
     data_files.extend([
         (ETC + '/NetworkManager/dispatcher.d/',
          ['tools/hook-network-manager']),
-        (ETC + '/dhcp/dhclient-exit-hooks.d/', ['tools/hook-dhclient']),
-        (LIB + '/udev/rules.d', [f for f in glob('udev/*.rules')])
+        ('/usr/lib/udev/rules.d', [f for f in glob('udev/*.rules')])
     ])
 # Use a subclass for install that handles
 # adding on the right init system configuration files
@@ -267,7 +266,6 @@ setuptools.setup(
     scripts=['tools/cloud-init-per'],
     license='Dual-licensed under GPLv3 or Apache 2.0',
     data_files=data_files,
-    install_requires=requirements,
     cmdclass=cmdclass,
     entry_points={
         'console_scripts': [
