@@ -1,0 +1,25 @@
+From 368a5b7b6472723cffc11d1e16f74c980cce6655 Mon Sep 17 00:00:00 2001
+From: Cloud User <will@stackhpc.com>
+Date: Thu, 14 Jun 2018 13:47:06 +0000
+Subject: [PATCH 13/13] Change default user to centos
+
+---
+ rhel/cloud.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rhel/cloud.cfg b/rhel/cloud.cfg
+index 8644872..f7578d0 100644
+--- a/rhel/cloud.cfg
++++ b/rhel/cloud.cfg
+@@ -52,7 +52,7 @@ cloud_final_modules:
+ 
+ system_info:
+   default_user:
+-    name: cloud-user
++    name: centos
+     lock_passwd: true
+     gecos: Cloud User
+     groups: [wheel, adm, systemd-journal]
+-- 
+1.8.3.1
+

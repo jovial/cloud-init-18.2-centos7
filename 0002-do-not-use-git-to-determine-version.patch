@@ -1,0 +1,66 @@
+From efc0bbdd0d0d749ceb3bab064f3c12dfa4f55c4c Mon Sep 17 00:00:00 2001
+From: "Lars Kellogg-Stedman Date: Thu, 12 Jan 2017 16:21:10 -0500"
+ <lars@redhat.com>
+Date: Thu, 14 Jun 2018 15:50:26 +0000
+Subject: [PATCH 02/13] do not use git to determine version
+
+trying to use git to determine the current cloud-init version will
+fail when building the package.
+
+X-downstream-only: true
+---
+ tools/read-version | 31 +------------------------------
+ 1 file changed, 1 insertion(+), 30 deletions(-)
+
+diff --git a/tools/read-version b/tools/read-version
+index 3ea9e66..3b1a50c 100755
+--- a/tools/read-version
++++ b/tools/read-version
+@@ -45,19 +45,6 @@ def which(program):
+     return None
+ 
+ 
+-def is_gitdir(path):
+-    # Return boolean indicating if path is a git tree.
+-    git_meta = os.path.join(path, '.git')
+-    if os.path.isdir(git_meta):
+-        return True
+-    if os.path.exists(git_meta):
+-        # in a git worktree, .git is a file with 'gitdir: x'
+-        with open(git_meta, "rb") as fp:
+-            if b'gitdir:' in fp.read():
+-                return True
+-    return False
+-
+-
+ use_long = '--long' in sys.argv or os.environ.get('CI_RV_LONG')
+ use_tags = '--tags' in sys.argv or os.environ.get('CI_RV_TAGS')
+ output_json = '--json' in sys.argv
+@@ -65,23 +52,7 @@ output_json = '--json' in sys.argv
+ src_version = ci_version.version_string()
+ version_long = None
+ 
+-if is_gitdir(_tdir) and which("git"):
+-    flags = []
+-    if use_tags:
+-        flags = ['--tags']
+-    cmd = ['git', 'describe', '--abbrev=8', '--match=[0-9]*'] + flags
+-
+-    version = tiny_p(cmd).strip()
+-
+-    if not version.startswith(src_version):
+-        sys.stderr.write("git describe version (%s) differs from "
+-                         "cloudinit.version (%s)\n" % (version, src_version))
+-        sys.exit(1)
+-
+-    version_long = tiny_p(cmd + ["--long"]).strip()
+-else:
+-    version = src_version
+-    version_long = None
++version = src_version
+ 
+ # version is X.Y.Z[+xxx.gHASH]
+ # version_long is None or X.Y.Z-xxx-gHASH
+-- 
+1.8.3.1
+

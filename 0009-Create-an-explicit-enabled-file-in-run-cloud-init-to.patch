@@ -1,0 +1,29 @@
+From d41eaa033a2fa8d6050dc00953aaeebdad5cf483 Mon Sep 17 00:00:00 2001
+From: Ryan McCabe <rmccabe@redhat.com>
+Date: Fri, 10 Nov 2017 10:03:44 -0500
+Subject: [PATCH 09/13] Create an explicit enabled file in /run/cloud-init/ to
+ control whether the dhclient and NM hooks run on Azure.
+
+X-downstream-only: Yes
+Resolves: rhbz#1474226
+---
+ rhel/systemd/cloud-init-local.service | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/rhel/systemd/cloud-init-local.service b/rhel/systemd/cloud-init-local.service
+index 8174937..047907c 100644
+--- a/rhel/systemd/cloud-init-local.service
++++ b/rhel/systemd/cloud-init-local.service
+@@ -14,6 +14,9 @@ ConditionKernelCommandLine=!cloud-init=disabled
+ 
+ [Service]
+ Type=oneshot
++ExecStartPre=/bin/mkdir -p /run/cloud-init
++ExecStartPre=/sbin/restorecon /run/cloud-init
++ExecStartPre=/usr/bin/touch /run/cloud-init/enabled
+ ExecStart=/usr/bin/cloud-init init --local
+ ExecStart=/bin/touch /run/cloud-init/network-config-ready
+ RemainAfterExit=yes
+-- 
+1.8.3.1
+
