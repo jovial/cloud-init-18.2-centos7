@@ -18,59 +18,6 @@ Source1:        cloud-init-rhel.cfg
 Source2:        cloud-init-README.rhel
 Source3:        cloud-init-tmpfiles.conf
 
-# The following line stops 'rdopkg update-patches' from inserting Patch
-# directives in the middle of our Source directives.
-#
-# patches_base=0.7.9
-Patch0001: 0001-configuration-changes-for-RHEL-package.patch
-Patch0002: 0002-do-not-use-git-to-determine-version.patch
-#Patch0003: 0003-util-teach-write_file-about-copy_mode-option.patch
-Patch0004: 0004-Do-not-write-NM_CONTROLLED-no-in-generated-interface.patch
-# Backport
-#Patch0005: 0005-url_helper-fail-gracefully-if-oauthlib-is-not-availa.patch
-#Patch0006: 0006-rsyslog-replace-with-stop.patch
-#Patch0007: 0007-OpenStack-Use-timeout-and-retries-from-config-in-get.patch
-#Patch0008: 0008-correct-errors-in-cloudinit-net-sysconfig.py.patch
-#Patch0009: 0009-net-do-not-raise-exception-for-3-nameservers.patch
-#Patch0010: 0010-net-support-both-ipv4-and-ipv6-gateways-in-sysconfig.patch
-Patch0011: 0011-systemd-replace-generator-with-unit-conditionals.patch
-#Patch0012: 0012-OpenStack-add-dvs-to-the-list-of-physical-link-types.patch
-#Patch0013: 0013-Bounce-network-interface-for-Azure-when-using-the-bu.patch
-Patch0014: 0014-limit-permissions-on-def_log_file.patch
-Patch0015: 0015-remove-tee-command-from-logging-configuration.patch
-Patch0016: 0016-add-power-state-change-module-to-cloud_final_modules.patch
-#Patch0017: 0017-sysconfig-Raise-ValueError-when-multiple-default-gat.patch
-# Backport
-#Patch0018: 0018-Fix-dual-stack-IPv4-IPv6-configuration-for-RHEL.patch
-# Backport
-#Patch0019: 0019-Add-missing-sysconfig-unit-test-data.patch
-# Backport
-#Patch0020: 0020-Fix-ipv6-subnet-detection.patch
-# Not applied to work around additional issues related to rhbz#1474226
-#Patch0021: 0021-azure-ensure-that-networkmanager-hook-script-runs.patch
-#Patch0022: 0022-RHEL-CentOS-Fix-default-routes-for-IPv4-IPv6-configu.patch
-#Patch0023: 0023-DatasourceEc2-add-warning-message-when-not-on-AWS.patch
-#Patch0024: 0024-Identify-Brightbox-as-an-Ec2-datasource-user.patch
-#Patch0025: 0025-AliYun-Enable-platform-identification-and-enable-by-.patch
-Patch0026: 0026-Fix-alibaba-cloud-unit-tests-to-work-with-0.7.9.patch
-#Patch0027: 0027-Fix-eni-rendering-of-multiple-IPs-per-interface.patch
-Patch0028: 0028-systemd-create-run-cloud-init-enabled.patch
-#Patch0029: 0029-support-loopback-as-a-device-type.patch
-#Patch0030: 0030-sysconfig-include-GATEWAY-value-if-set-in-subnet.patch
-#Patch0031: 0031-rh_subscription-Perform-null-checks-for-enabled-and-.patch
-#Patch0032: 0032-net-Allow-for-NetworkManager-configuration.patch
-# Backport
-#Patch0033: 0033-Render-DNS-and-DOMAIN-lines-for-sysconfig.patch
-Patch0034: 0034-Start_cloud_init_after_dbus.patch
-# Backport
-#Patch0035: 0035-sysconfig-Render-IPV6_DEFAULTGW-correctly.patch
-Patch0036: 0036-sysconfig-Don-t-write-BOOTPROTO-dhcp-for-ipv6-dhcp.patch
-# Fix for earlier backport?
-#Patch0037: 0037-sysconfig-Fix-traceback.patch
-#Patch0038: 0038-Fix-bug-that-resulted-in-an-attempt-to-rename-bonds.patch
-Patch0039: 0039-azure-Fix-publishing-of-hostname.patch
-Patch9999: cloud-init-add-centos-os.patch
-
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
