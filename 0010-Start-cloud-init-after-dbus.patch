@@ -1,0 +1,27 @@
+From cec10fd38fb9ee822ff2036da019dde0fc5720f8 Mon Sep 17 00:00:00 2001
+From: Cloud User <will@stackhpc.com>
+Date: Thu, 14 Jun 2018 15:53:54 +0000
+Subject: [PATCH] Start cloud init after dbus
+
+---
+ rhel/systemd/cloud-init-local.service | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/rhel/systemd/cloud-init-local.service b/rhel/systemd/cloud-init-local.service
+index 047907c..656eddb 100644
+--- a/rhel/systemd/cloud-init-local.service
++++ b/rhel/systemd/cloud-init-local.service
+@@ -3,10 +3,12 @@ Description=Initial cloud-init job (pre-networking)
+ DefaultDependencies=no
+ Wants=network-pre.target
+ After=systemd-remount-fs.service
++Requires=dbus.socket
++After=dbus.socket
+ Before=NetworkManager.service network.service
+ Before=network-pre.target
+ Before=shutdown.target
+-Before=sysinit.target
++Before=firewalld.target
+ Conflicts=shutdown.target
+ RequiresMountsFor=/var/lib/cloud
+ ConditionPathExists=!/etc/cloud/cloud-init.disabled

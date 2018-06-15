@@ -18,6 +18,24 @@ Source1:        cloud-init-rhel.cfg
 Source2:        cloud-init-README.rhel
 Source3:        cloud-init-tmpfiles.conf
 
+# The following line stops 'rdopkg update-patches' from inserting Patch
+# directives in the middle of our Source directives.
+#
+# patches_base=18.2
+Patch0001: 0001-configuration-changes-for-RHEL-package.patch
+Patch0002: 0002-do-not-use-git-to-determine-version.patch
+Patch0003: 0003-Do-not-write-NM_CONTROLLED-no-in-generated-interface.patch
+Patch0004: 0004-systemd-replace-generator-with-unit-conditionals.patch
+Patch0005: 0005-limit-permissions-on-def_log_file.patch
+Patch0006: 0006-remove-tee-command-from-logging-configuration.patch
+Patch0007: 0007-add-power-state-change-module-to-cloud_final_modules.patch
+Patch0008: 0008-Fix-alibaba-cloud-unit-tests-to-work-with-0.7.9.patch
+Patch0009: 0009-Create-an-explicit-enabled-file-in-run-cloud-init-to.patch
+Patch0010: 0010-Start-cloud-init-after-dbus.patch
+Patch0011: 0011-sysconfig-Don-t-write-BOOTPROTO-dhcp-for-ipv6-dhcp.patch
+Patch0012: 0012-azure-Fix-publishing-of-hostname.patch
+Patch0013: 0013-Change-default-user-to-centos.patch
+
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
 Obsoletes:      cloud-init < 0.7.5-3
