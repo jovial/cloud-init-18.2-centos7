@@ -1,0 +1,45 @@
+From 817c42aafe65a8df00db67ad8a85bede40777908 Mon Sep 17 00:00:00 2001
+From: Will Szumski <will@stackhpc.com>
+Date: Mon, 18 Jun 2018 13:50:29 +0100
+Subject: [PATCH] Log to stdout/stderr
+
+Upstream code doesn't handle misconfigured consoles. With
+Systemd we can just log to stderr,stderr and have systemd log
+to the console for us.
+
+see:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=967502
+
+for a similar issue
+---
+ cloudinit/util.py | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
+
+diff --git a/cloudinit/util.py b/cloudinit/util.py
+index 0ab2c48..e3cfc53 100644
+--- a/cloudinit/util.py
++++ b/cloudinit/util.py
+@@ -517,21 +517,7 @@ def multi_log(text, console=True, stderr=True,
+     if stderr:
+         sys.stderr.write(text)
+     if console:
+-        conpath = "/dev/console"
+-        if os.path.exists(conpath):
+-            with open(conpath, 'w') as wfh:
+-                wfh.write(text)
+-                wfh.flush()
+-        else:
+-            # A container may lack /dev/console (arguably a container bug).  If
+-            # it does not exist, then write output to stdout.  this will result
+-            # in duplicate stderr and stdout messages if stderr was True.
+-            #
+-            # even though upstart or systemd might have set up output to go to
+-            # /dev/console, the user may have configured elsewhere via
+-            # cloud-config 'output'.  If there is /dev/console, messages will
+-            # still get there.
+-            sys.stdout.write(text)
++        sys.stdout.write(text)
+     if log:
+         if text[-1] == "\n":
+             log.log(log_level, text[:-1])
