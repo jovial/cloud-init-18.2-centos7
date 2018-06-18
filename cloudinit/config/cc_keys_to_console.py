@@ -66,7 +66,7 @@ def handle(name, cfg, cloud, log, _args):
         cmd = [helper_path, ','.join(fp_blacklist), ','.join(key_blacklist)]
         (stdout, _stderr) = util.subp(cmd)
         util.multi_log("%s\n" % (stdout.strip()),
-                       stderr=False, console=True)
+                       stderr=True, console=False)
     except Exception:
         log.warn("Writing keys to the system console failed!")
         raise
