@@ -1,0 +1,31 @@
+From f816b7c2f53e3813bcc398fb6dd0dc7bcdf34872 Mon Sep 17 00:00:00 2001
+From: Will Szumski <will@stackhpc.com>
+Date: Mon, 18 Jun 2018 13:50:29 +0100
+Subject: [PATCH] Log to stderr
+
+Upstream code doesn't handle misconfigured consoles. With
+Systemd we can just log to stderr and have systemd log
+to the console for us.
+
+see:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=967502
+
+for a similar issue
+---
+ cloudinit/config/cc_keys_to_console.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cloudinit/config/cc_keys_to_console.py b/cloudinit/config/cc_keys_to_console.py
+index aff4010..f668c47 100644
+--- a/cloudinit/config/cc_keys_to_console.py
++++ b/cloudinit/config/cc_keys_to_console.py
+@@ -66,7 +66,7 @@ def handle(name, cfg, cloud, log, _args):
+         cmd = [helper_path, ','.join(fp_blacklist), ','.join(key_blacklist)]
+         (stdout, _stderr) = util.subp(cmd)
+         util.multi_log("%s\n" % (stdout.strip()),
+-                       stderr=False, console=True)
++                       stderr=True, console=False)
+     except Exception:
+         log.warn("Writing keys to the system console failed!")
+         raise

@@ -7,7 +7,7 @@
 
 Name:           cloud-init
 Version:        18.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cloud instance init scripts
 
 Group:          System Environment/Base
@@ -35,6 +35,7 @@ Patch0010: 0010-Start-cloud-init-after-dbus.patch
 Patch0011: 0011-sysconfig-Don-t-write-BOOTPROTO-dhcp-for-ipv6-dhcp.patch
 Patch0012: 0012-azure-Fix-publishing-of-hostname.patch
 Patch0013: 0013-Change-default-user-to-centos.patch
+Patch0014: 0014-Log-to-stderr.patch
 
 # Deal with noarch -> arch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1067089
@@ -187,6 +188,9 @@ fi
 %config(noreplace) %{_sysconfdir}/rsyslog.d/21-cloudinit.conf
 
 %changelog
+* Mon Jun 18 2018 Will Szumski <will@stackhpc.com> 18.2-2
+- Log to stderr
+
 * Thu Jun 14 2018 Will Szumski <will@stackhpc.com> 18.2-1
 - Update to 18.2
 
